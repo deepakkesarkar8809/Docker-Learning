@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Docker Learning Tracker</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    padding:30px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#cbd5e1;
+    margin-bottom:30px;
+}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.progress{
+    width:100%;
+    background:#334155;
+    height:22px;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.bar{
+    width:0%;
+    height:100%;
+    background:#22c55e;
+    transition:.4s;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    border:1px solid #334155;
+    padding:12px;
+    text-align:left;
+}
+
+th{
+    background:#2563eb;
+}
+
+tr:nth-child(even){
+    background:#162033;
+}
+
+button{
+    padding:8px 15px;
+    background:#22c55e;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#16a34a;
+}
+
+footer{
+    margin-top:40px;
+    text-align:center;
+    color:#94a3b8;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🐳 Docker Learning Tracker</h1>
+
+<p class="subtitle">
+Goal: Complete Docker Playlist in 14 Days
+</p>
+
+<div class="card">
+
+<h2>Overall Progress</h2>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<p id="progressText" style="margin-top:15px;">
+0 / 14 Days Completed
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Study Plan</h2>
+
+<table>
+
+<tr>
+<th>Done</th>
+<th>Day</th>
+<th>Topic</th>
+</tr>
+
+<tbody id="tableBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<footer>
+Made by Deepak 🚀 | Docker Journey → Kubernetes → SRE
+</footer>
+
+<script>
+
+const topics=[
+"Introduction + Install Docker",
+"Docker Architecture & Commands",
+"Containers Practice",
+"Images",
+"Dockerfile",
+"Build Custom Images",
+"Revision",
+"Volumes",
+"Networks",
+"Docker Compose",
+"Environment Variables",
+"Docker Hub",
+"Mini Project",
+"Final Revision"
+];
+
+const body=document.getElementById("tableBody");
+
+topics.forEach((topic,index)=>{
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=`
+<td><input type="checkbox" onchange="updateProgress()"></td>
+<td>Day ${index+1}</td>
+<td>${topic}</td>
+`;
+
+body.appendChild(tr);
+
+});
+
+function updateProgress(){
+
+const checks=document.querySelectorAll("input[type='checkbox']");
+const checked=document.querySelectorAll("input[type='checkbox']:checked").length;
+
+const percent=(checked/checks.length)*100;
+
+document.getElementById("bar").style.width=percent+"%";
+
+document.getElementById("progressText").innerHTML=
+`${checked} / ${checks.length} Days Completed (${Math.round(percent)}%)`;
+
+localStorage.setItem("docker-progress",JSON.stringify([...checks].map(c=>c.checked)));
+
+}
+
+window.onload=()=>{
+
+const saved=JSON.parse(localStorage.getItem("docker-progress"));
+
+if(saved){
+
+const checks=document.querySelectorAll("input");
+
+checks.forEach((c,i)=>{
+
+c.checked=saved[i];
+
+});
+
+updateProgress();
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
